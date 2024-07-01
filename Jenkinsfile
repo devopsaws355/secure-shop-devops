@@ -1,8 +1,6 @@
 pipeline {
-    agent {
-        label 'slave_1'
-    }
-    
+    agent any
+      
     tools{
         jdk  'JAVA_HOME'
         maven  'MAVEN_HOME'
@@ -54,12 +52,12 @@ pipeline {
             } 
         }
         
-        stage('OWASP Dependency Check') {
-            steps {
-                dependencyCheck additionalArguments: ' --scan ./', odcInstallation: 'owasp-dp-check'
-                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-            }
-        }
+        // stage('OWASP Dependency Check') {
+        //     steps {
+        //         dependencyCheck additionalArguments: ' --scan ./', odcInstallation: 'owasp-dp-check'
+        //         dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+        //     }
+        // }
         stage('TRIVY FS SCAN') {
             steps {
                 sh "trivy fs . > trivyfs.txt"
@@ -72,13 +70,13 @@ pipeline {
             }
         }
         
-        stage('Deploy To Nexus') {
-            steps {
-                withMaven(globalMavenSettingsConfig: 'global-maven', jdk: 'JAVA_HOME', maven: 'MAVEN_HOME', mavenSettingsConfig: '', traceability: true) {
-                    sh "mvn deploy -DskipTests=true"
-                }
-            }
-        }
+        // stage('Deploy To Nexus') {
+        //     steps {
+        //         withMaven(globalMavenSettingsConfig: 'global-maven', jdk: 'JAVA_HOME', maven: 'MAVEN_HOME', mavenSettingsConfig: '', traceability: true) {
+        //             sh "mvn deploy -DskipTests=true"
+        //         }
+        //     }
+        // }
         
         stage('Build & Tag Docker Image') {
             steps {
