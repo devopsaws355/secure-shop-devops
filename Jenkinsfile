@@ -81,7 +81,7 @@ pipeline {
         stage('Build & Tag Docker Image') {
             steps {
                 script {
-                    withDockerRegistry(credentialsId: 'DockerHubPass', toolName: 'docker') {
+                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
                         sh "docker build -t shopping-cart -f Dockerfile ."
                         sh "docker tag  shopping-cart sandya890/shopping-cart:latest"
                         
